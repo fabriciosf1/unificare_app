@@ -1,0 +1,606 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#F4F6FA;--surface:#FFFFFF;--card:#FFFFFF;
+    --teal:#0F6E56;--teal-l:#E1F5EE;--teal-m:#5DCAA5;
+    --red:#A32D2D;--red-l:#FCEBEB;--red-m:#E24B4A;
+    --amber:#854F0B;--amber-l:#FAEEDA;--amber-m:#EF9F27;
+    --green:#3B6D11;--green-l:#EAF3DE;--green-m:#639922;
+    --blue:#185FA5;--blue-l:#E6F1FB;--blue-m:#378ADD;
+    --text:#1A1A1A;--muted:#6B7280;--hint:#9CA3AF;--border:#E5E7EB;
+    --f:'Plus Jakarta Sans',sans-serif;
+  }
+  body{background:var(--bg);font-family:var(--f);font-size:14px;display:flex;justify-content:center;align-items:flex-start;padding:16px 8px;gap:16px;flex-wrap:wrap}
+
+  .phone{width:360px;background:#1A1A2E;border-radius:44px;padding:6px;flex-shrink:0}
+  .phone-inner{background:var(--bg);border-radius:40px;overflow:hidden;height:740px;display:flex;flex-direction:column;position:relative}
+  .status-bar{background:var(--surface);display:flex;align-items:center;justify-content:space-between;padding:12px 20px 8px;font-size:12px;font-weight:600;color:var(--text);flex-shrink:0}
+  .screen{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+  .screen::-webkit-scrollbar{display:none}
+  .bottom-nav{background:var(--surface);border-top:1px solid var(--border);display:flex;padding:8px 0 12px;flex-shrink:0}
+  .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0;background:none;border:none;font-family:var(--f)}
+  .nav-btn .ni{font-size:20px;line-height:1}
+  .nav-btn .nl{font-size:10px;color:var(--muted);font-weight:500}
+  .nav-btn.act .nl{color:var(--teal);font-weight:600}
+  .nav-dot{width:4px;height:4px;border-radius:50%;background:var(--red-m);margin:0 auto;margin-top:2px}
+
+  .page{display:none;padding:0 0 16px}
+  .page.act{display:block}
+
+  .header{background:var(--surface);padding:16px 20px 14px;border-bottom:1px solid var(--border)}
+  .header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+  .header h2{font-size:18px;font-weight:700;color:var(--text)}
+  .header p{font-size:13px;color:var(--muted)}
+  .notif-btn{width:36px;height:36px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;font-size:18px;position:relative}
+  .notif-red{position:absolute;top:6px;right:6px;width:8px;height:8px;background:var(--red-m);border-radius:50%;border:2px solid var(--surface)}
+
+  .section{padding:16px 16px 0}
+  .sec-label{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px}
+
+  .alert-card{background:var(--red-l);border:1px solid var(--red-m);border-radius:16px;padding:14px;margin:12px 16px 0;display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+  .alert-card.warn{background:var(--amber-l);border-color:var(--amber-m)}
+  .alert-icon-wrap{width:38px;height:38px;border-radius:12px;background:var(--red-m);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .alert-icon-wrap.warn{background:var(--amber-m)}
+  .alert-card h4{font-size:13px;font-weight:700;color:var(--red);margin-bottom:2px}
+  .alert-card.warn h4{color:var(--amber)}
+  .alert-card p{font-size:12px;color:var(--muted);line-height:1.4}
+  .alert-card .at{font-size:11px;font-weight:600;color:var(--red-m);margin-top:4px}
+  .alert-card.warn .at{color:var(--amber-m)}
+
+  .pt-hero{background:var(--surface);margin:12px 16px 0;border-radius:20px;border:1px solid var(--border);padding:16px}
+  .pt-hero-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .pt-av{width:48px;height:48px;border-radius:50%;background:var(--blue-l);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:var(--blue);flex-shrink:0}
+  .pt-av.teal{background:var(--teal-l);color:var(--teal)}
+  .pt-name{font-size:15px;font-weight:700;color:var(--text)}
+  .pt-sub{font-size:12px;color:var(--muted)}
+  .status-pill{margin-left:auto;font-size:10px;font-weight:700;border-radius:20px;padding:4px 10px}
+  .status-pill.ok{background:var(--green-l);color:var(--green)}
+  .status-pill.alert{background:var(--red-l);color:var(--red)}
+  .status-pill.warn{background:var(--amber-l);color:var(--amber)}
+
+  .vitals-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .vital-box{background:var(--bg);border-radius:12px;padding:10px;text-align:center}
+  .vital-box.alert-v{background:var(--red-l)}
+  .vb-label{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+  .vb-value{font-size:20px;font-weight:700;color:var(--text)}
+  .vb-value.alert{color:var(--red)}
+  .vb-value.warn{color:var(--amber)}
+  .vb-unit{font-size:11px;color:var(--muted)}
+
+  .action-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 16px 0}
+  .act-btn{border-radius:14px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;border:none;font-family:var(--f)}
+  .act-btn .ab-icon{font-size:22px}
+  .act-btn .ab-label{font-size:11px;font-weight:600}
+  .act-btn.primary{background:var(--teal);color:#fff}
+  .act-btn.secondary{background:var(--bg);color:var(--text);border:1px solid var(--border)}
+  .act-btn.danger{background:var(--red-m);color:#fff}
+  .act-btn.info{background:var(--blue-l);color:var(--blue)}
+
+  .checkin-card{background:var(--surface);border-radius:20px;border:1px solid var(--border);margin:12px 16px 0;overflow:hidden}
+  .ci-header{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+  .ci-header h4{font-size:14px;font-weight:700;color:var(--text)}
+  .ci-live{font-size:10px;background:var(--green-l);color:var(--green);font-weight:700;border-radius:20px;padding:3px 8px}
+  .msg-wrap{padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+  .msg{max-width:80%;padding:10px 12px;font-size:13px;line-height:1.4}
+  .msg.ai{background:var(--teal-l);border-radius:4px 14px 14px 14px;color:var(--teal);align-self:flex-start}
+  .msg.user{background:var(--blue-l);border-radius:14px 4px 14px 14px;color:var(--blue);align-self:flex-end}
+  .msg-sender{font-size:10px;font-weight:700;margin-bottom:3px;color:var(--muted)}
+  .ci-footer{padding:10px 16px;border-top:1px solid var(--border);display:flex;gap:8px}
+  .ci-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:8px 14px;font-size:13px;font-family:var(--f);color:var(--text);outline:none}
+  .ci-send{width:36px;height:36px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;font-size:16px;color:#fff;flex-shrink:0}
+
+  .med-list{background:var(--surface);border-radius:20px;border:1px solid var(--border);margin:12px 16px 0;overflow:hidden}
+  .med-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border)}
+  .med-item:last-child{border-bottom:none}
+  .med-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .med-info p{font-size:13px;font-weight:600;color:var(--text)}
+  .med-info span{font-size:11px;color:var(--muted)}
+  .med-status{margin-left:auto;font-size:10px;font-weight:700;border-radius:20px;padding:3px 8px}
+  .ms-ok{background:var(--green-l);color:var(--green)}
+  .ms-pend{background:var(--amber-l);color:var(--amber)}
+  .ms-late{background:var(--red-l);color:var(--red)}
+
+  .prog-card{background:var(--surface);border-radius:20px;border:1px solid var(--border);margin:12px 16px 0;padding:16px}
+  .prog-card h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:14px}
+  .prog-item{margin-bottom:12px}
+  .prog-top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;color:var(--muted)}
+  .prog-top span:last-child{font-weight:700;color:var(--text)}
+  .prog-bar{background:var(--bg);border-radius:8px;height:6px;overflow:hidden}
+  .prog-fill{height:100%;border-radius:8px;background:var(--teal-m)}
+
+  .report-card{background:var(--surface);border-radius:20px;border:1px solid var(--border);margin:12px 16px 0;padding:16px}
+  .report-card h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+  .report-card p{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:12px}
+  .report-meta{display:flex;align-items:center;justify-content:space-between}
+  .report-date{font-size:11px;color:var(--hint)}
+  .read-btn{font-size:12px;font-weight:600;color:var(--teal);background:none;border:none;cursor:pointer;font-family:var(--f)}
+
+  .profile-header{background:var(--surface);padding:24px 20px 20px;text-align:center;border-bottom:1px solid var(--border)}
+  .prof-av{width:64px;height:64px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--teal);margin:0 auto 10px}
+  .profile-header h3{font-size:17px;font-weight:700;color:var(--text)}
+  .profile-header p{font-size:13px;color:var(--muted)}
+  .plan-badge{display:inline-block;background:var(--blue-l);color:var(--blue);font-size:11px;font-weight:700;border-radius:20px;padding:3px 10px;margin-top:6px}
+
+  .menu-list{background:var(--surface);border-radius:20px;border:1px solid var(--border);margin:12px 16px 0;overflow:hidden}
+  .menu-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer}
+  .menu-item:last-child{border-bottom:none}
+  .menu-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .menu-item p{font-size:14px;font-weight:500;color:var(--text)}
+  .menu-item span{font-size:12px;color:var(--muted)}
+  .menu-arrow{margin-left:auto;color:var(--hint);font-size:16px}
+
+  .sos-card{background:var(--red-l);border:2px solid var(--red-m);border-radius:20px;padding:20px;margin:12px 16px 0;text-align:center}
+  .sos-title{font-size:15px;font-weight:700;color:var(--red);margin-bottom:6px}
+  .sos-sub{font-size:12px;color:var(--muted);line-height:1.4;margin-bottom:16px}
+  .sos-btn{width:80px;height:80px;border-radius:50%;background:var(--red-m);border:none;cursor:pointer;font-family:var(--f);color:#fff;font-size:13px;font-weight:700;margin:0 auto;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px}
+  .sos-note{font-size:11px;color:var(--muted);margin-top:12px;line-height:1.4}
+
+  .tab-bar{display:flex;background:var(--surface);border-bottom:1px solid var(--border);padding:0 16px}
+  .tab{flex:1;padding:10px 0;text-align:center;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent}
+  .tab.act{color:var(--teal);border-bottom-color:var(--teal)}
+
+  .stat-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px 16px 0}
+  .stat-box{background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:14px;text-align:center}
+  .stat-val{font-size:24px;font-weight:700}
+  .stat-lbl{font-size:11px;color:var(--muted);margin-top:2px}
+</style>
+
+<h2 class="sr-only">Protótipo do aplicativo móvel UnifiCare — duas telas navegáveis: visão da família e visão do operador</h2>
+
+<div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;padding:8px 0">
+
+  <!-- PHONE 1 — FAMÍLIA -->
+  <div>
+    <div style="text-align:center;font-size:11px;font-weight:700;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.5px;text-transform:uppercase">App Família</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar">
+          <span>9:41</span>
+          <span style="font-size:16px">&#9679;&#9679;&#9679;</span>
+          <span>100%</span>
+        </div>
+
+        <div class="screen" id="fam-screen">
+
+          <!-- HOME FAM -->
+          <div class="page act" id="fam-home">
+            <div class="header">
+              <div class="header-top">
+                <div>
+                  <h2>Olá, Ana Paula</h2>
+                  <p>Sua mãe precisa de atenção</p>
+                </div>
+                <button class="notif-btn" onclick="famNav('fam-notif')">
+                  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                  <span class="notif-red"></span>
+                </button>
+              </div>
+            </div>
+
+            <div class="alert-card" onclick="famNav('fam-urgent')">
+              <div class="alert-icon-wrap">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13" stroke="white" stroke-width="2"/><circle cx="12" cy="17" r="1" fill="white"/></svg>
+              </div>
+              <div>
+                <h4>Alerta ativo — Maria Luiza</h4>
+                <p>SpO2 em 91% e sem resposta ao check-in. Operador está avaliando.</p>
+                <div class="at">Agora · Toque para detalhes</div>
+              </div>
+            </div>
+
+            <div class="section" style="margin-top:16px">
+              <div class="sec-label">Status de hoje</div>
+            </div>
+            <div class="pt-hero">
+              <div class="pt-hero-top">
+                <div class="pt-av teal">ML</div>
+                <div>
+                  <div class="pt-name">Maria Luiza Santos</div>
+                  <div class="pt-sub">84 anos · Plano Premium</div>
+                </div>
+                <div class="status-pill alert">Alerta</div>
+              </div>
+              <div class="vitals-row">
+                <div class="vital-box alert-v"><div class="vb-label">Freq. Cardíaca</div><div class="vb-value alert">108</div><div class="vb-unit">bpm</div></div>
+                <div class="vital-box alert-v"><div class="vb-label">SpO2</div><div class="vb-value alert">91%</div><div class="vb-unit">saturação</div></div>
+                <div class="vital-box"><div class="vb-label">Temperatura</div><div class="vb-value warn">37.9°</div><div class="vb-unit">celsius</div></div>
+                <div class="vital-box"><div class="vb-label">Localização</div><div class="vb-value" style="font-size:14px">Casa</div><div class="vb-unit">GPS ativo</div></div>
+              </div>
+            </div>
+
+            <div class="action-row">
+              <button class="act-btn primary" onclick="famNav('fam-chat')">
+                <span class="ab-icon">💬</span>
+                <span class="ab-label">Falar com suporte</span>
+              </button>
+              <button class="act-btn secondary" onclick="famNav('fam-meds')">
+                <span class="ab-icon">💊</span>
+                <span class="ab-label">Medicamentos</span>
+              </button>
+            </div>
+
+            <div class="section" style="margin-top:16px">
+              <div class="sec-label">Relatório de hoje</div>
+            </div>
+            <div class="report-card">
+              <h4>Resumo diário — 22/04/2026</h4>
+              <p>Manhã tranquila. Check-in das 9h realizado com sucesso. Todos os remédios da manhã foram tomados. Alerta gerado às 14:32.</p>
+              <div class="report-meta">
+                <span class="report-date">Atualizado às 14:35</span>
+                <button class="read-btn">Ver completo</button>
+              </div>
+            </div>
+
+            <div class="section" style="margin-top:16px">
+              <div class="sec-label">Medicação de hoje</div>
+            </div>
+            <div class="med-list">
+              <div class="med-item"><div class="med-dot" style="background:var(--green-m)"></div><div class="med-info"><p>Metoprolol 25mg</p><span>08:00</span></div><div class="med-status ms-ok">Tomado</div></div>
+              <div class="med-item"><div class="med-dot" style="background:var(--green-m)"></div><div class="med-info"><p>Losartana 50mg</p><span>08:00</span></div><div class="med-status ms-ok">Tomado</div></div>
+              <div class="med-item"><div class="med-dot" style="background:var(--amber-m)"></div><div class="med-info"><p>AAS 100mg</p><span>12:00</span></div><div class="med-status ms-pend">Atrasado</div></div>
+              <div class="med-item"><div class="med-dot" style="background:var(--hint)"></div><div class="med-info"><p>Atorvastatina 20mg</p><span>20:00</span></div><div class="med-status ms-pend">Pendente</div></div>
+            </div>
+            <div style="height:16px"></div>
+          </div>
+
+          <!-- URGENT FAM -->
+          <div class="page" id="fam-urgent">
+            <div class="header">
+              <div class="header-top">
+                <button onclick="famNav('fam-home')" style="background:none;border:none;cursor:pointer;font-size:22px;color:var(--text);margin-right:8px">‹</button>
+                <div><h2>Alerta Ativo</h2><p>Operador sendo notificado</p></div>
+              </div>
+            </div>
+            <div class="sos-card">
+              <div class="sos-title">Maria Luiza Santos — SpO2 91%</div>
+              <div class="sos-sub">Operador da UnifiCare está avaliando a situação agora. Você será contatado imediatamente se necessário.</div>
+              <div class="sos-btn" onclick="famSOS()">
+                <svg width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <span style="font-size:11px">Ligar</span>
+              </div>
+              <div class="sos-note">O SAMU será acionado somente por decisão do operador humano após avaliação. Você será avisado antes de qualquer acionamento.</div>
+            </div>
+            <div class="report-card" style="margin-top:0">
+              <h4>Protocolo em andamento</h4>
+              <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+                <div style="display:flex;align-items:center;gap:10px;font-size:13px">
+                  <div style="width:20px;height:20px;border-radius:50%;background:var(--green-l);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--green);font-weight:700;flex-shrink:0">✓</div>
+                  <span>Smartwatch detectou SpO2 baixa — 14:32</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;font-size:13px">
+                  <div style="width:20px;height:20px;border-radius:50%;background:var(--green-l);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--green);font-weight:700;flex-shrink:0">✓</div>
+                  <span>IA tentou contato 3x — sem resposta</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;font-size:13px">
+                  <div style="width:20px;height:20px;border-radius:50%;background:var(--amber-l);border:2px solid var(--amber-m);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;animation:pulse2 1s infinite" id="op-step">!</div>
+                  <span style="font-weight:600;color:var(--amber)">Operador avaliando via câmera — agora</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;font-size:13px;opacity:.4">
+                  <div style="width:20px;height:20px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted)">4</div>
+                  <span>Operador decide e contata família</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CHAT FAM -->
+          <div class="page" id="fam-chat">
+            <div class="header">
+              <div class="header-top">
+                <button onclick="famNav('fam-home')" style="background:none;border:none;cursor:pointer;font-size:22px;color:var(--text);margin-right:8px">‹</button>
+                <div><h2>Suporte UnifiCare</h2><p>Operador online</p></div>
+                <div style="width:8px;height:8px;background:var(--green-m);border-radius:50%;margin-left:auto"></div>
+              </div>
+            </div>
+            <div class="checkin-card" style="margin:0;border-radius:0;border:none">
+              <div class="msg-wrap" style="min-height:400px">
+                <div><div class="msg-sender">UnifiCare</div><div class="msg ai">Olá, Ana Paula. Identificamos um alerta para sua mãe. Nosso operador está avaliando agora.</div></div>
+                <div style="align-self:flex-end"><div class="msg-sender" style="text-align:right">Você</div><div class="msg user">Ela está bem? O que aconteceu?</div></div>
+                <div><div class="msg-sender">UnifiCare</div><div class="msg ai">O smartwatch detectou SpO2 de 91% às 14:32. Tentamos contato por voz 3 vezes. Nosso operador está verificando o feed da câmera agora. Te aviso em instantes.</div></div>
+                <div><div class="msg-sender">UnifiCare</div><div class="msg ai">Atualização: operador viu sua mãe sentada no sofá. Ela parece estar bem mas sonolenta. Vamos tentar ligar direto agora.</div></div>
+                <div style="align-self:flex-end"><div class="msg-sender" style="text-align:right">Você</div><div class="msg user">Ok obrigada, aguardo</div></div>
+              </div>
+              <div class="ci-footer">
+                <input class="ci-input" placeholder="Mensagem..." />
+                <button class="ci-send">›</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- MEDS FAM -->
+          <div class="page" id="fam-meds">
+            <div class="header">
+              <div class="header-top">
+                <button onclick="famNav('fam-home')" style="background:none;border:none;cursor:pointer;font-size:22px;color:var(--text);margin-right:8px">‹</button>
+                <div><h2>Medicamentos</h2><p>Maria Luiza — hoje</p></div>
+              </div>
+            </div>
+            <div class="prog-card">
+              <h4>Aderência hoje</h4>
+              <div class="prog-item"><div class="prog-top"><span>Remédios tomados</span><span>2 de 4</span></div><div class="prog-bar"><div class="prog-fill" style="width:50%"></div></div></div>
+            </div>
+            <div class="med-list" style="margin-top:12px">
+              <div class="med-item"><div class="med-dot" style="background:var(--green-m)"></div><div class="med-info"><p>Metoprolol 25mg</p><span>Tomado às 08:05</span></div><div class="med-status ms-ok">OK</div></div>
+              <div class="med-item"><div class="med-dot" style="background:var(--green-m)"></div><div class="med-info"><p>Losartana 50mg</p><span>Tomado às 08:05</span></div><div class="med-status ms-ok">OK</div></div>
+              <div class="med-item"><div class="med-dot" style="background:var(--amber-m)"></div><div class="med-info"><p>AAS 100mg</p><span>Previsto às 12:00</span></div><div class="med-status ms-late">Atrasado</div></div>
+              <div class="med-item"><div class="med-dot" style="background:var(--hint)"></div><div class="med-info"><p>Atorvastatina 20mg</p><span>Previsto às 20:00</span></div><div class="med-status ms-pend">Pendente</div></div>
+              <div class="med-item"><div class="med-dot" style="background:var(--hint)"></div><div class="med-info"><p>Omeprazol 20mg</p><span>Tomado às 07:32</span></div><div class="med-status ms-ok">OK</div></div>
+            </div>
+          </div>
+
+          <!-- NOTIF FAM -->
+          <div class="page" id="fam-notif">
+            <div class="header">
+              <div class="header-top">
+                <button onclick="famNav('fam-home')" style="background:none;border:none;cursor:pointer;font-size:22px;color:var(--text);margin-right:8px">‹</button>
+                <div><h2>Notificações</h2></div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:1px;background:var(--border);margin-top:12px">
+              <div style="background:var(--surface);padding:14px 16px;display:flex;gap:12px">
+                <div style="width:40px;height:40px;border-radius:12px;background:var(--red-l);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">⚡</div>
+                <div><div style="font-size:13px;font-weight:600;color:var(--text)">Alerta — SpO2 91%</div><div style="font-size:12px;color:var(--muted)">Maria Luiza · Operador avaliando</div><div style="font-size:11px;color:var(--hint);margin-top:2px">Há 14 minutos</div></div>
+              </div>
+              <div style="background:var(--surface);padding:14px 16px;display:flex;gap:12px">
+                <div style="width:40px;height:40px;border-radius:12px;background:var(--green-l);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">✓</div>
+                <div><div style="font-size:13px;font-weight:600;color:var(--text)">Medicamentos da manhã tomados</div><div style="font-size:12px;color:var(--muted)">Maria Luiza confirmou às 08:05</div><div style="font-size:11px;color:var(--hint);margin-top:2px">Hoje às 08:05</div></div>
+              </div>
+              <div style="background:var(--surface);padding:14px 16px;display:flex;gap:12px">
+                <div style="width:40px;height:40px;border-radius:12px;background:var(--blue-l);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📋</div>
+                <div><div style="font-size:13px;font-weight:600;color:var(--text)">Relatório diário disponível</div><div style="font-size:12px;color:var(--muted)">Check-in das 09h realizado com sucesso</div><div style="font-size:11px;color:var(--hint);margin-top:2px">Hoje às 12:00</div></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="bottom-nav">
+          <button class="nav-btn act" id="fn-home" onclick="famNav('fam-home');setFamTab('fn-home')">
+            <span class="ni">⌂</span>
+            <span class="nl">Início</span>
+          </button>
+          <button class="nav-btn" id="fn-meds" onclick="famNav('fam-meds');setFamTab('fn-meds')">
+            <span class="ni">💊</span>
+            <span class="nl">Remédios</span>
+          </button>
+          <button class="nav-btn" id="fn-chat" onclick="famNav('fam-chat');setFamTab('fn-chat')">
+            <span class="ni">💬</span>
+            <span class="nl">Chat</span>
+            <div class="nav-dot"></div>
+          </button>
+          <button class="nav-btn" id="fn-notif" onclick="famNav('fam-notif');setFamTab('fn-notif')">
+            <span class="ni">🔔</span>
+            <span class="nl">Alertas</span>
+            <div class="nav-dot"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHONE 2 — OPERADOR -->
+  <div>
+    <div style="text-align:center;font-size:11px;font-weight:700;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.5px;text-transform:uppercase">App Operador</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar">
+          <span>9:41</span>
+          <span style="font-size:16px">&#9679;&#9679;&#9679;</span>
+          <span>100%</span>
+        </div>
+
+        <div class="screen" id="op-screen">
+
+          <!-- HOME OP -->
+          <div class="page act" id="op-home">
+            <div class="header">
+              <div class="header-top">
+                <div><h2>Central</h2><p>12 pacientes · 2 alertas</p></div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--green);font-weight:600">
+                  <div style="width:8px;height:8px;background:var(--green-m);border-radius:50%"></div>
+                  Online
+                </div>
+              </div>
+            </div>
+
+            <div class="stat-row">
+              <div class="stat-box"><div class="stat-val" style="color:var(--red)">2</div><div class="stat-lbl">Alertas ativos</div></div>
+              <div class="stat-box"><div class="stat-val" style="color:var(--teal)">12</div><div class="stat-lbl">Monitorados</div></div>
+              <div class="stat-box"><div class="stat-val" style="color:var(--amber)">3</div><div class="stat-lbl">Check-ins pend.</div></div>
+              <div class="stat-box"><div class="stat-val" style="color:var(--green)">94%</div><div class="stat-lbl">Aderência med.</div></div>
+            </div>
+
+            <div style="margin-top:16px;padding:0 16px">
+              <div class="sec-label">Alertas ativos</div>
+            </div>
+            <div class="alert-card" onclick="opNav('op-urgent')">
+              <div class="alert-icon-wrap">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13" stroke="white" stroke-width="2"/><circle cx="12" cy="17" r="1" fill="white"/></svg>
+              </div>
+              <div>
+                <h4>Maria Luiza Santos — SpO2 91%</h4>
+                <p>Sem resposta ao check-in. Avaliação necessária.</p>
+                <div class="at">14:32 · Toque para protocolo</div>
+              </div>
+            </div>
+            <div class="alert-card warn" style="margin-top:8px">
+              <div class="alert-icon-wrap warn">
+                <svg width="20" height="20" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div>
+                <h4>José Almeida — check-in atrasado</h4>
+                <p>Janela de 2h ultrapassada. Ligar para paciente.</p>
+                <div class="at" style="color:var(--amber-m)">13:05 · Verificar</div>
+              </div>
+            </div>
+
+            <div style="margin-top:16px;padding:0 16px">
+              <div class="sec-label">Pacientes estáveis</div>
+            </div>
+            <div style="background:var(--surface);border-radius:20px;border:1px solid var(--border);margin:0 16px;overflow:hidden">
+              <div onclick="opNav('op-pt')" style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border);cursor:pointer">
+                <div class="pt-av teal" style="width:36px;height:36px;font-size:12px">CM</div>
+                <div><div style="font-size:13px;font-weight:600;color:var(--text)">Clara Meireles F.</div><div style="font-size:11px;color:var(--muted)">81 anos · FC 72 · SpO2 98%</div></div>
+                <div class="status-pill ok" style="margin-left:auto;font-size:10px">OK</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border)">
+                <div class="pt-av" style="width:36px;height:36px;font-size:12px">AR</div>
+                <div><div style="font-size:13px;font-weight:600;color:var(--text)">Antônio Ribeiro</div><div style="font-size:11px;color:var(--muted)">86 anos · FC 68 · SpO2 97%</div></div>
+                <div class="status-pill ok" style="margin-left:auto;font-size:10px">OK</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:12px 14px">
+                <div class="pt-av" style="width:36px;height:36px;font-size:12px;background:var(--teal-l);color:var(--teal)">BN</div>
+                <div><div style="font-size:13px;font-weight:600;color:var(--text)">Beatriz Nogueira</div><div style="font-size:11px;color:var(--muted)">79 anos · FC 75 · SpO2 99%</div></div>
+                <div class="status-pill ok" style="margin-left:auto;font-size:10px">OK</div>
+              </div>
+            </div>
+            <div style="height:16px"></div>
+          </div>
+
+          <!-- URGENT OP -->
+          <div class="page" id="op-urgent">
+            <div class="header">
+              <div class="header-top">
+                <button onclick="opNav('op-home')" style="background:none;border:none;cursor:pointer;font-size:22px;color:var(--text);margin-right:8px">‹</button>
+                <div><h2>Protocolo Ativo</h2><p>Maria Luiza Santos</p></div>
+              </div>
+            </div>
+            <div style="background:var(--red-l);border-bottom:2px solid var(--red-m);padding:12px 16px;display:flex;justify-content:space-between;align-items:center">
+              <div style="font-size:13px;font-weight:700;color:var(--red)">FC 108 · SpO2 91% · 14 min sem resp.</div>
+              <div style="font-size:11px;color:var(--muted)">14:32</div>
+            </div>
+            <div style="padding:14px 16px">
+              <div class="sec-label">Protocolo — etapas</div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--green-l);border-radius:12px">
+                  <div style="width:24px;height:24px;border-radius:50%;background:var(--green-m);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:700;flex-shrink:0">✓</div>
+                  <div><div style="font-size:12px;font-weight:600;color:var(--green)">Smartwatch detectou anomalia</div><div style="font-size:11px;color:var(--muted)">Automático — IA</div></div>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--green-l);border-radius:12px">
+                  <div style="width:24px;height:24px;border-radius:50%;background:var(--green-m);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:700;flex-shrink:0">✓</div>
+                  <div><div style="font-size:12px;font-weight:600;color:var(--green)">ConectaLar tentou contato (3x)</div><div style="font-size:11px;color:var(--muted)">Sem resposta — Automático</div></div>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--amber-l);border-radius:12px;border:1px solid var(--amber-m)">
+                  <div style="width:24px;height:24px;border-radius:50%;border:2px solid var(--amber-m);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;color:var(--amber)">!</div>
+                  <div><div style="font-size:12px;font-weight:700;color:var(--amber)">Você: avaliar câmera + ligar</div><div style="font-size:11px;color:var(--muted)">Ação humana necessária agora</div></div>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--surface);border-radius:12px;border:1px solid var(--border);opacity:.5">
+                  <div style="width:24px;height:24px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);flex-shrink:0">4</div>
+                  <div><div style="font-size:12px;font-weight:600;color:var(--muted)">Você decide: acionar SAMU 192</div><div style="font-size:11px;color:var(--hint)">Sempre decisão humana</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="action-row" style="margin-top:0">
+              <button class="act-btn info" onclick="opNav('op-home')">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                <span class="ab-label">Ver câmera</span>
+              </button>
+              <button class="act-btn danger" onclick="samuAlert()">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <span class="ab-label">Acionar SAMU</span>
+              </button>
+            </div>
+            <div class="report-card" style="margin-top:12px">
+              <h4>Contatos da família</h4>
+              <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
+                <div style="display:flex;align-items:center;justify-content:space-between">
+                  <div><div style="font-size:13px;font-weight:600">Ana Paula Santos</div><div style="font-size:11px;color:var(--muted)">(34) 9 9821-4455 · Filha</div></div>
+                  <button style="background:var(--teal);color:#fff;border:none;border-radius:10px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--f)">Ligar</button>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between">
+                  <div><div style="font-size:13px;font-weight:600">Carlos Santos</div><div style="font-size:11px;color:var(--muted)">(34) 9 9654-2210 · Filho</div></div>
+                  <button style="background:var(--teal);color:#fff;border:none;border-radius:10px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--f)">Ligar</button>
+                </div>
+              </div>
+            </div>
+            <button onclick="resolveOp()" style="width:calc(100% - 32px);margin:12px 16px;background:var(--green-l);color:var(--green);border:1px solid var(--green-m);border-radius:14px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--f)">Paciente está bem — Resolver</button>
+          </div>
+
+          <!-- PT DETAIL OP -->
+          <div class="page" id="op-pt">
+            <div class="header">
+              <div class="header-top">
+                <button onclick="opNav('op-home')" style="background:none;border:none;cursor:pointer;font-size:22px;color:var(--text);margin-right:8px">‹</button>
+                <div><h2>Clara Meireles F.</h2><p>81 anos · Plano Padrão</p></div>
+                <div class="status-pill ok" style="margin-left:auto">Estável</div>
+              </div>
+            </div>
+            <div class="pt-hero" style="margin-top:12px">
+              <div class="vitals-row">
+                <div class="vital-box"><div class="vb-label">Freq. Cardíaca</div><div class="vb-value" style="color:var(--green)">72</div><div class="vb-unit">bpm</div></div>
+                <div class="vital-box"><div class="vb-label">SpO2</div><div class="vb-value" style="color:var(--green)">98%</div><div class="vb-unit">saturação</div></div>
+                <div class="vital-box"><div class="vb-label">Temperatura</div><div class="vb-value">36.5°</div><div class="vb-unit">celsius</div></div>
+                <div class="vital-box"><div class="vb-label">GPS</div><div class="vb-value" style="font-size:13px">Casa</div><div class="vb-unit">ativo</div></div>
+              </div>
+            </div>
+            <div class="med-list" style="margin-top:0">
+              <div style="padding:12px 16px;border-bottom:1px solid var(--border)"><div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Medicação hoje</div></div>
+              <div class="med-item"><div class="med-dot" style="background:var(--green-m)"></div><div class="med-info"><p>Metoprolol 25mg</p><span>08:00</span></div><div class="med-status ms-ok">OK</div></div>
+              <div class="med-item"><div class="med-dot" style="background:var(--green-m)"></div><div class="med-info"><p>Hidroclorotiazida 25mg</p><span>08:00</span></div><div class="med-status ms-ok">OK</div></div>
+              <div class="med-item"><div class="med-dot" style="background:var(--hint)"></div><div class="med-info"><p>Cálcio + Vitamina D</p><span>20:00</span></div><div class="med-status ms-pend">Pendente</div></div>
+            </div>
+            <div class="report-card">
+              <h4>Check-in das 09:00</h4>
+              <p>"Bom dia! Estou bem, obrigada. Dormi bem essa noite. Tomei todos os remédios."</p>
+              <div class="report-meta">
+                <div style="display:inline-block;background:var(--green-l);color:var(--green);font-size:11px;font-weight:700;border-radius:20px;padding:3px 8px">Sem anomalias</div>
+                <span class="report-date">09:00</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="bottom-nav">
+          <button class="nav-btn act" id="on-home" onclick="opNav('op-home');setOpTab('on-home')">
+            <span class="ni">⌂</span>
+            <span class="nl">Central</span>
+          </button>
+          <button class="nav-btn" id="on-pts" onclick="opNav('op-pt');setOpTab('on-pts')">
+            <span class="ni">👥</span>
+            <span class="nl">Pacientes</span>
+          </button>
+          <button class="nav-btn" id="on-urg" onclick="opNav('op-urgent');setOpTab('on-urg')">
+            <span class="ni">⚡</span>
+            <span class="nl">Urgente</span>
+            <div class="nav-dot"></div>
+          </button>
+          <button class="nav-btn" id="on-prof">
+            <span class="ni">👤</span>
+            <span class="nl">Perfil</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function famNav(id){
+    document.querySelectorAll('#fam-screen .page').forEach(p=>p.classList.remove('act'));
+    const pg=document.getElementById(id);
+    if(pg){pg.classList.add('act');document.getElementById('fam-screen').scrollTop=0}
+  }
+  function setFamTab(id){
+    document.querySelectorAll('.phone .nav-btn').forEach(b=>{if(['fn-home','fn-meds','fn-chat','fn-notif'].includes(b.id))b.classList.remove('act')});
+    const b=document.getElementById(id);if(b)b.classList.add('act');
+  }
+  function opNav(id){
+    document.querySelectorAll('#op-screen .page').forEach(p=>p.classList.remove('act'));
+    const pg=document.getElementById(id);
+    if(pg){pg.classList.add('act');document.getElementById('op-screen').scrollTop=0}
+  }
+  function setOpTab(id){
+    document.querySelectorAll('.phone .nav-btn').forEach(b=>{if(['on-home','on-pts','on-urg','on-prof'].includes(b.id))b.classList.remove('act')});
+    const b=document.getElementById(id);if(b)b.classList.add('act');
+  }
+  function famSOS(){alert('Em produção: ligação direta para operador UnifiCare');}
+  function samuAlert(){
+    const btn=event.target.closest('.act-btn');
+    if(btn){btn.style.background='#666';btn.querySelector('.ab-label').textContent='SAMU acionado';}
+  }
+  function resolveOp(){opNav('op-home');}
+</script>
