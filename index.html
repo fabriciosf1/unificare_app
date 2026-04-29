@@ -4,11 +4,11 @@
   *{box-sizing:border-box;margin:0;padding:0}
   :root{
     --bg:#F4F6FA;--surface:#FFFFFF;--card:#FFFFFF;
-    --teal:#0F6E56;--teal-l:#E1F5EE;--teal-m:#5DCAA5;
+    --teal:#2E7D32;--teal-l:#E8F5E9;--teal-m:#4CAF50;
     --red:#A32D2D;--red-l:#FCEBEB;--red-m:#E24B4A;
     --amber:#854F0B;--amber-l:#FAEEDA;--amber-m:#EF9F27;
-    --green:#3B6D11;--green-l:#EAF3DE;--green-m:#639922;
-    --blue:#185FA5;--blue-l:#E6F1FB;--blue-m:#378ADD;
+    --green:#2E7D32;--green-l:#E8F5E9;--green-m:#4CAF50;
+    --blue:#1A3A5C;--blue-l:#E3EBF3;--blue-m:#2C5F8A;
     --text:#1A1A1A;--muted:#6B7280;--hint:#9CA3AF;--border:#E5E7EB;
     --f:'Plus Jakarta Sans',sans-serif;
   }
@@ -147,9 +147,178 @@
   .stat-lbl{font-size:11px;color:var(--muted);margin-top:2px}
 </style>
 
-<h2 class="sr-only">Protótipo do aplicativo móvel UnifiCare — duas telas navegáveis: visão da família e visão do operador</h2>
+<h2 class="sr-only">Protótipo do aplicativo móvel UnifiCare — telas navegáveis por perfil</h2>
 
 <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;padding:8px 0">
+
+  <!-- PHONE 0 — IDOSO -->
+  <div>
+    <div style="text-align:center;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;letter-spacing:.5px;text-transform:uppercase">App Idoso</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar">
+          <span>9:41</span>
+          <span style="font-size:16px">&#9679;&#9679;&#9679;</span>
+          <span>100%</span>
+        </div>
+
+        <div class="screen" id="elder-screen">
+
+          <!-- HOME IDOSO -->
+          <div class="page act" id="elder-home">
+            <div style="background:var(--surface);padding:20px;border-bottom:1px solid var(--border);text-align:center">
+              <img src="../assets/logo-icon.svg" alt="UnifiCare" style="width:40px;height:40px;margin-bottom:6px">
+              <h2 style="font-size:22px;font-weight:700;color:var(--text)">Olá, Maria Luiza</h2>
+              <p style="font-size:14px;color:var(--muted)">Terça-feira, 22 de Abril</p>
+            </div>
+
+            <!-- Alerta de medicação -->
+            <div class="alert-card warn" style="margin:12px 16px" onclick="elderNav('elder-meds')">
+              <div class="alert-icon-wrap warn">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+              </div>
+              <div>
+                <h4 style="font-size:15px">Hora do remédio!</h4>
+                <p style="font-size:13px">AAS 100mg — atrasado desde 12:00</p>
+                <div class="at" style="color:var(--amber-m);font-size:12px">Toque para ver todos</div>
+              </div>
+            </div>
+
+            <!-- Botões grandes -->
+            <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+              <button onclick="elderNav('elder-sos')" style="width:100%;padding:24px;background:var(--red-m);color:#fff;border:none;border-radius:20px;font-size:20px;font-weight:700;cursor:pointer;font-family:var(--f);display:flex;align-items:center;justify-content:center;gap:10px">
+                <svg width="28" height="28" fill="white" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                PEDIR AJUDA
+              </button>
+
+              <button onclick="elderNav('elder-meds')" style="width:100%;padding:20px;background:var(--teal-l);color:var(--teal);border:2px solid var(--teal-m);border-radius:20px;font-size:18px;font-weight:700;cursor:pointer;font-family:var(--f);display:flex;align-items:center;justify-content:center;gap:10px">
+                💊 Meus Remédios
+              </button>
+
+              <button onclick="elderNav('elder-checkin')" style="width:100%;padding:20px;background:var(--blue-l);color:var(--blue);border:2px solid var(--blue-m);border-radius:20px;font-size:18px;font-weight:700;cursor:pointer;font-family:var(--f);display:flex;align-items:center;justify-content:center;gap:10px">
+                🎤 Falar com UnifiCare
+              </button>
+            </div>
+
+            <!-- Status simplificado -->
+            <div style="margin:0 16px;background:var(--surface);border-radius:20px;border:1px solid var(--border);padding:16px">
+              <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Como estou hoje</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                <div style="background:var(--bg);border-radius:14px;padding:12px;text-align:center">
+                  <div style="font-size:11px;color:var(--muted);font-weight:600">Coração</div>
+                  <div style="font-size:28px;font-weight:700;color:var(--red)">108</div>
+                  <div style="font-size:11px;color:var(--muted)">bpm</div>
+                </div>
+                <div style="background:var(--bg);border-radius:14px;padding:12px;text-align:center">
+                  <div style="font-size:11px;color:var(--muted);font-weight:600">Oxigênio</div>
+                  <div style="font-size:28px;font-weight:700;color:var(--red)">91%</div>
+                  <div style="font-size:11px;color:var(--muted)">saturação</div>
+                </div>
+              </div>
+            </div>
+            <div style="height:16px"></div>
+          </div>
+
+          <!-- SOS IDOSO -->
+          <div class="page" id="elder-sos">
+            <div style="background:var(--surface);padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+              <button onclick="elderNav('elder-home')" style="background:none;border:none;cursor:pointer;font-size:24px;color:var(--text)">‹</button>
+              <h2 style="font-size:18px;font-weight:700;color:var(--text)">Pedir Ajuda</h2>
+            </div>
+            <div style="padding:24px 16px;text-align:center">
+              <div style="background:var(--red-l);border:2px solid var(--red-m);border-radius:24px;padding:32px 20px">
+                <div style="font-size:18px;font-weight:700;color:var(--red);margin-bottom:8px">Precisa de ajuda?</div>
+                <div style="font-size:14px;color:var(--muted);line-height:1.5;margin-bottom:24px">Aperte o botão abaixo e a equipe UnifiCare vai ligar para você imediatamente.</div>
+                <button onclick="elderSOS()" style="width:120px;height:120px;border-radius:50%;background:var(--red-m);border:none;cursor:pointer;color:#fff;font-size:16px;font-weight:700;font-family:var(--f);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;margin:0 auto;box-shadow:0 4px 20px rgba(226,75,74,0.4)">
+                  <svg width="32" height="32" fill="white" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  LIGAR
+                </button>
+                <div style="font-size:12px;color:var(--muted);margin-top:20px;line-height:1.5">Você também pode pedir ajuda pelo smartwatch ou dizer "UnifiCare, preciso de ajuda"</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MEDS IDOSO -->
+          <div class="page" id="elder-meds">
+            <div style="background:var(--surface);padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+              <button onclick="elderNav('elder-home')" style="background:none;border:none;cursor:pointer;font-size:24px;color:var(--text)">‹</button>
+              <h2 style="font-size:18px;font-weight:700;color:var(--text)">Meus Remédios</h2>
+            </div>
+            <div class="prog-card" style="margin:12px 16px">
+              <h4 style="font-size:16px">Hoje</h4>
+              <div class="prog-item"><div class="prog-top"><span style="font-size:14px">Tomados</span><span style="font-size:14px">2 de 4</span></div><div class="prog-bar"><div class="prog-fill" style="width:50%"></div></div></div>
+            </div>
+            <div style="padding:0 16px;display:flex;flex-direction:column;gap:8px">
+              <div style="background:var(--green-l);border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px">
+                <div style="font-size:28px">✅</div>
+                <div><div style="font-size:15px;font-weight:700;color:var(--green)">Metoprolol 25mg</div><div style="font-size:13px;color:var(--muted)">Tomado às 08:05</div></div>
+              </div>
+              <div style="background:var(--green-l);border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px">
+                <div style="font-size:28px">✅</div>
+                <div><div style="font-size:15px;font-weight:700;color:var(--green)">Losartana 50mg</div><div style="font-size:13px;color:var(--muted)">Tomado às 08:05</div></div>
+              </div>
+              <div style="background:var(--amber-l);border:2px solid var(--amber-m);border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px">
+                <div style="font-size:28px">⏰</div>
+                <div><div style="font-size:15px;font-weight:700;color:var(--amber)">AAS 100mg</div><div style="font-size:13px;color:var(--muted)">Atrasado — era às 12:00</div></div>
+                <button style="margin-left:auto;background:var(--teal);color:#fff;border:none;border-radius:12px;padding:10px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--f)">Tomei</button>
+              </div>
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px;opacity:.6">
+                <div style="font-size:28px">💊</div>
+                <div><div style="font-size:15px;font-weight:600;color:var(--text)">Atorvastatina 20mg</div><div style="font-size:13px;color:var(--muted)">Às 20:00</div></div>
+              </div>
+            </div>
+            <div style="height:16px"></div>
+          </div>
+
+          <!-- CHECK-IN IDOSO -->
+          <div class="page" id="elder-checkin">
+            <div style="background:var(--surface);padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+              <button onclick="elderNav('elder-home')" style="background:none;border:none;cursor:pointer;font-size:24px;color:var(--text)">‹</button>
+              <h2 style="font-size:18px;font-weight:700;color:var(--text)">Check-in</h2>
+            </div>
+            <div style="padding:20px 16px;text-align:center">
+              <div style="background:var(--teal-l);border-radius:24px;padding:32px 20px">
+                <div style="width:80px;height:80px;background:var(--teal);border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center">
+                  <svg width="36" height="36" fill="white" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="19" x2="12" y2="23" stroke="white" stroke-width="2"/><line x1="8" y1="23" x2="16" y2="23" stroke="white" stroke-width="2"/></svg>
+                </div>
+                <div style="font-size:18px;font-weight:700;color:var(--teal);margin-bottom:6px">Como você está?</div>
+                <div style="font-size:14px;color:var(--muted);line-height:1.5;margin-bottom:20px">Aperte o botão e diga como está se sentindo. A UnifiCare vai ouvir você.</div>
+                <button onclick="elderCheckin()" id="elder-mic-btn" style="width:100%;padding:18px;background:var(--teal);color:#fff;border:none;border-radius:16px;font-size:17px;font-weight:700;cursor:pointer;font-family:var(--f);display:flex;align-items:center;justify-content:center;gap:8px">
+                  🎤 Iniciar Check-in
+                </button>
+              </div>
+              <div style="margin-top:16px;background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:16px;text-align:left">
+                <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:8px">Último check-in — 09:00</div>
+                <div style="font-size:14px;color:var(--text);line-height:1.6">"Bom dia! Estou bem, dormi direitinho. Já tomei os remédios da manhã."</div>
+                <div style="margin-top:8px;background:var(--green-l);border-radius:8px;padding:6px 10px;font-size:12px;color:var(--green);font-weight:600;display:inline-block">✓ Tudo normal</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="bottom-nav">
+          <button class="nav-btn act" id="en-home" onclick="elderNav('elder-home');setElderTab('en-home')">
+            <span class="ni">⌂</span>
+            <span class="nl">Início</span>
+          </button>
+          <button class="nav-btn" id="en-meds" onclick="elderNav('elder-meds');setElderTab('en-meds')">
+            <span class="ni">💊</span>
+            <span class="nl">Remédios</span>
+            <div class="nav-dot"></div>
+          </button>
+          <button class="nav-btn" id="en-sos" onclick="elderNav('elder-sos');setElderTab('en-sos')">
+            <span class="ni" style="color:var(--red-m)">🆘</span>
+            <span class="nl">Ajuda</span>
+          </button>
+          <button class="nav-btn" id="en-checkin" onclick="elderNav('elder-checkin');setElderTab('en-checkin')">
+            <span class="ni">🎤</span>
+            <span class="nl">Check-in</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- PHONE 1 — FAMÍLIA -->
   <div>
@@ -255,7 +424,7 @@
             </div>
             <div class="sos-card">
               <div class="sos-title">Maria Luiza Santos — SpO2 91%</div>
-              <div class="sos-sub">Operador da UnifiCare está avaliando a situação agora. Você será contatado imediatamente se necessário.</div>
+              <div class="sos-sub">Equipe UnifiCare está avaliando a situação agora. Você será contatado imediatamente se necessário.</div>
               <div class="sos-btn" onclick="famSOS()">
                 <svg width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                 <span style="font-size:11px">Ligar</span>
@@ -290,16 +459,16 @@
             <div class="header">
               <div class="header-top">
                 <button onclick="famNav('fam-home')" style="background:none;border:none;cursor:pointer;font-size:22px;color:var(--text);margin-right:8px">‹</button>
-                <div><h2>Suporte UnifiCare</h2><p>Operador online</p></div>
+                <div><h2>Suporte UnifiCare</h2><p>Equipe online</p></div>
                 <div style="width:8px;height:8px;background:var(--green-m);border-radius:50%;margin-left:auto"></div>
               </div>
             </div>
             <div class="checkin-card" style="margin:0;border-radius:0;border:none">
               <div class="msg-wrap" style="min-height:400px">
-                <div><div class="msg-sender">UnifiCare</div><div class="msg ai">Olá, Ana Paula. Identificamos um alerta para sua mãe. Nosso operador está avaliando agora.</div></div>
+                <div><div class="msg-sender">UnifiCare</div><div class="msg ai">Olá, Ana Paula. Identificamos um alerta para sua mãe. Nossa equipe está avaliando agora.</div></div>
                 <div style="align-self:flex-end"><div class="msg-sender" style="text-align:right">Você</div><div class="msg user">Ela está bem? O que aconteceu?</div></div>
-                <div><div class="msg-sender">UnifiCare</div><div class="msg ai">O smartwatch detectou SpO2 de 91% às 14:32. Tentamos contato por voz 3 vezes. Nosso operador está verificando o feed da câmera agora. Te aviso em instantes.</div></div>
-                <div><div class="msg-sender">UnifiCare</div><div class="msg ai">Atualização: operador viu sua mãe sentada no sofá. Ela parece estar bem mas sonolenta. Vamos tentar ligar direto agora.</div></div>
+                <div><div class="msg-sender">UnifiCare</div><div class="msg ai">O smartwatch detectou SpO2 de 91% às 14:32. Tentamos contato por voz 3 vezes. Nossa equipe está verificando agora. Te aviso em instantes.</div></div>
+                <div><div class="msg-sender">UnifiCare</div><div class="msg ai">Atualização: equipe confirmou que sua mãe está sentada no sofá. Ela parece bem mas sonolenta. Vamos tentar ligar direto agora.</div></div>
                 <div style="align-self:flex-end"><div class="msg-sender" style="text-align:right">Você</div><div class="msg user">Ok obrigada, aguardo</div></div>
               </div>
               <div class="ci-footer">
@@ -382,7 +551,7 @@
 
   <!-- PHONE 2 — OPERADOR -->
   <div>
-    <div style="text-align:center;font-size:11px;font-weight:700;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.5px;text-transform:uppercase">App Operador</div>
+    <div style="text-align:center;font-size:11px;font-weight:700;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.5px;text-transform:uppercase">App Back Office</div>
     <div class="phone">
       <div class="phone-inner">
         <div class="status-bar">
@@ -480,7 +649,7 @@
                 </div>
                 <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--green-l);border-radius:12px">
                   <div style="width:24px;height:24px;border-radius:50%;background:var(--green-m);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:700;flex-shrink:0">✓</div>
-                  <div><div style="font-size:12px;font-weight:600;color:var(--green)">ConectaLar tentou contato (3x)</div><div style="font-size:11px;color:var(--muted)">Sem resposta — Automático</div></div>
+                  <div><div style="font-size:12px;font-weight:600;color:var(--green)">UnifiCare tentou contato (3x)</div><div style="font-size:11px;color:var(--muted)">Sem resposta — Automático</div></div>
                 </div>
                 <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--amber-l);border-radius:12px;border:1px solid var(--amber-m)">
                   <div style="width:24px;height:24px;border-radius:50%;border:2px solid var(--amber-m);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;color:var(--amber)">!</div>
@@ -579,6 +748,20 @@
 </div>
 
 <script>
+  function elderNav(id){
+    document.querySelectorAll('#elder-screen .page').forEach(p=>p.classList.remove('act'));
+    const pg=document.getElementById(id);
+    if(pg){pg.classList.add('act');document.getElementById('elder-screen').scrollTop=0}
+  }
+  function setElderTab(id){
+    ['en-home','en-meds','en-sos','en-checkin'].forEach(i=>{const b=document.getElementById(i);if(b)b.classList.remove('act')});
+    const b=document.getElementById(id);if(b)b.classList.add('act');
+  }
+  function elderSOS(){alert('Em produção: ligação direta para equipe UnifiCare');}
+  function elderCheckin(){
+    const btn=document.getElementById('elder-mic-btn');
+    if(btn){btn.textContent='🎤 Ouvindo...';btn.style.background='var(--amber-m)';setTimeout(()=>{btn.textContent='✓ Check-in enviado!';btn.style.background='var(--green)'},2000)}
+  }
   function famNav(id){
     document.querySelectorAll('#fam-screen .page').forEach(p=>p.classList.remove('act'));
     const pg=document.getElementById(id);
@@ -597,7 +780,7 @@
     document.querySelectorAll('.phone .nav-btn').forEach(b=>{if(['on-home','on-pts','on-urg','on-prof'].includes(b.id))b.classList.remove('act')});
     const b=document.getElementById(id);if(b)b.classList.add('act');
   }
-  function famSOS(){alert('Em produção: ligação direta para operador UnifiCare');}
+  function famSOS(){alert('Em produção: ligação direta para equipe UnifiCare');}
   function samuAlert(){
     const btn=event.target.closest('.act-btn');
     if(btn){btn.style.background='#666';btn.querySelector('.ab-label').textContent='SAMU acionado';}
